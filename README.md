@@ -1,8 +1,8 @@
-# 🏠 Roomie - Find & List Rental Spaces & Roommates ✨🎉
+# 🏠 Roomie - Find & List Rental Spaces & Roommates
 
 ## 📜 Project Description&#x20;
 
-Roomie is a 🌐 web-based platform built with the 🟢 MERN stack that helps 👥 users find 🏡 rental rooms or flats while allowing 🏠 landlords to list their 🆓 available properties. Additionally, it helps users find 👫 compatible roommates for shared living spaces. 🏠🔍💬
+Roomie is a 🌐 web-based platform built with the MERN stack that helps users find rental rooms or flats while allowing landlords to list their available properties. Additionally, it helps users find compatible roommates for shared living spaces.
 
 ## ✨ Features&#x20;
 
@@ -40,7 +40,7 @@ cd roomie
 
 #### 📦 Install Dependencies&#x20;
 
-##### ⚙️ Backend 🏗️🛠️🚀
+##### ⚙️ Backend
 
 ```bash
 cd server
