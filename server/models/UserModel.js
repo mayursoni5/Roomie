@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 import { genSalt, hash } from "bcrypt";
 
 const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     required: [true, "Email is required."],
@@ -11,13 +15,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Password is required."],
   },
-  firstName: {
+  role: {
     type: String,
-    required: false,
+    enum: ["seeker", "owner"],
+    required: true,
   },
-  lastName: {
+  listings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Listing" }],
+  profilePicture: {
     type: String,
-    required: false,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 
