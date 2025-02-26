@@ -3,6 +3,9 @@ import jwt from "jsonwebtoken";
 import User from "../models/UserModel.js";
 import Listing from "../models/ListingModel.js"
 
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const verifyToken = async (req, res, next) => {
   const token = req.cookies.jwt;
@@ -37,6 +40,7 @@ export const isOwner = async (req, res, next) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 
 
