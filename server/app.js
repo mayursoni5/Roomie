@@ -6,6 +6,9 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/AuthRoute.js";
 import listingRoutes from "./routes/listingRoutes.js";
 
+import bookingRoutes from "./routes/bookingRoutes.js"
+
+
 dotenv.config();
 
 const app = expess();
@@ -25,6 +28,9 @@ app.use(expess.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/listings", listingRoutes); 
+
+app.use("/api/bookings",bookingRoutes)
+
 
 app.listen(port, () => {
   console.log(`The Server is running on ${port}`);
