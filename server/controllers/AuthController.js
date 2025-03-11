@@ -14,7 +14,7 @@ export const signup = async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
 
-    if (!name || !email || !password || !role) {
+    if (!email || !password) {
       return res.status(400).send("All fields are required");
     }
 
@@ -30,6 +30,7 @@ export const signup = async (req, res, next) => {
       user: {
         id: user.id,
         email: user.email,
+        profileSetup: user.profileSetup,
       },
     });
   } catch (error) {
@@ -65,6 +66,8 @@ export const login = async (req, res, next) => {
         id: user.id,
         email: user.email,
         firstName: user.firstName,
+        lastName: user.lastName,
+        profileSetup: user.profileSetup,
       },
     });
   } catch (error) {
