@@ -6,9 +6,11 @@ import { toast } from "sonner";
 import { apiClient } from "@/lib/api-client";
 import { LOGIN_ROUTE, SIGNUP_ROUTE } from "@/utils/constants";
 import { useNavigate } from "react-router-dom";
+import { useAppStore } from "@/store";
 
 export default function Auth() {
   const navigate = useNavigate();
+  const { setUserInfo } = useAppStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -48,14 +50,14 @@ export default function Auth() {
         { email, password },
         { withCredentials: true }
       );
-      //   if (res.data.user.id) {
-      //     setUserInfo(res.data.user);
-      //     if (res.data.user.profileSetup) {
-      //       navigate("/chat");
-      //     } else {
-      //       navigate("/profile");
-      //     }
-      //   }
+      if (res.data.user.id) {
+        setUserInfo(res.data.user);
+        if (res.data.user.profileSetup) {
+          navigate("/dashboard");
+        } else {
+          navigate("/profile");
+        }
+      }
       console.log(res);
     }
   };
@@ -68,8 +70,9 @@ export default function Auth() {
         { withCredentials: true }
       );
       if (res.status === 201) {
+        setUserInfo(res.data.user);
         toast.success("Signup successful!");
-        // navigate("/profile");
+        navigate("/profile");
       }
       console.log(res);
     }
