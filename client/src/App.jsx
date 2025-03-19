@@ -62,30 +62,43 @@ function App() {
   return (
     <>
       <BrowserRouter>
-      <Navbar/>
-        <Routes>
-          <Route path="*" element={<Navigate to="/auth" />} />
-          <Route path="/" element={<Home/>}/>
-          <Route path="/auth" element={<Auth />} />
-          <Route
-            path="/profile"
-            element={
-              <PrivateRoute>
-                <Profile />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+    
+      <Navbar />
 
+      <Routes>
+        
+        <Route path="/" element={<Home />} />
+        
+      
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+       
+        <Route 
+          path="/profile" 
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          } 
+        />
+        <Route 
+          path="/dashboard" 
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          } 
+        />
+
+       
+        <Route path="/listings" element={<Listing />} />
+
+       
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </BrowserRouter>
     </>
   );
 }
