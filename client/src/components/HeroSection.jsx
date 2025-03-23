@@ -1,28 +1,24 @@
 import React from "react";
 import SearchSection from "./SearchSection";
+import TypewriterEffectDemo from "./TypewriterEffectDemo";
 
 const HeroSection = () => {
   return (
-    <div className="relative w-full h-[120vh]  flex flex-col justify-center items-center text-center px-4">
+    <div className="relative w-full h-[110vh] flex flex-col justify-center items-center text-center px-4  bg-gray-100">
+      
+      {/* "We Provide" Section - Adjusted to be Bolder and Higher */}
+      {/* <div className="mb-2 md:mb-4 lg:mb-6">
+        <h2 className="text-xl md:text-2xl lg:text-4xl font-black uppercase tracking-widest text-gray-800">
+          We Provide
+        </h2>
+      </div> */}
 
-        
-    
-<div className="text-center px-4 ">
-  {/* "We Provide" - Now More Bold */}
-  <h2 className="text-lg md:text-xl lg:text-3xl font-extrabold uppercase tracking-widest text-gray-700 mb-5 ">
-    We Provide
-  </h2>
+      <TypewriterEffectDemo className={"mt-30"}/>
 
-  {/* Main Heading as SVG - Now Less Bold */}
-  <a href="https://git.io/typing-svg">
-    <img 
-      src="https://readme-typing-svg.demolab.com?font=Poppins&weight=500&size=85&pause=2000&width=2000&height=130&lines=Great+Rooms.+Better+Roommates.++Best+Living.&color=000000" 
-      alt="Typing SVG"
-      className="mx-auto"
-    />
-  </a>
-</div>
-<SearchSection/>
+      {/* Search Section - Moved Closer to Animated Text */}
+      <div className="mt-[-20px] md:mt-[-20px] lg:mt-[-10px] w-full flex justify-center">
+        <SearchSection />
+      </div>
     </div>
   );
 };
