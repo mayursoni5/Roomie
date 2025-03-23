@@ -5,10 +5,9 @@ import Profile from "./pages/profile/Profile";
 import Dashboard from "./pages/dashboard/Dashboard";
 import { useAppStore } from "./store";
 import Navbar from '@/components/Navbar'
-import  Home  from "../src/pages/Home"
-import Listing from "../src/pages/Listing"
-import Login from "../src/pages/Login"
-import Register from "../src/pages/Register"
+import Home from "./pages/Landing/Home";
+
+
 
 
 const PrivateRoute = ({ children }) => {
@@ -63,18 +62,15 @@ function App() {
     <>
       <BrowserRouter>
     
-      <Navbar />
+      
 
       <Routes>
         
-        <Route path="/" element={<Home />} />
-        
-      
+        <Route path="/" element={<>
+      <Navbar /> <Home /></>} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-
-       
+        
+        
         <Route 
           path="/profile" 
           element={
@@ -93,7 +89,7 @@ function App() {
         />
 
        
-        <Route path="/listings" element={<Listing />} />
+      
 
        
         <Route path="*" element={<Navigate to="/" />} />

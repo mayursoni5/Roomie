@@ -4,7 +4,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 
 const SearchSection = () => {
   return (
-    <div className="flex flex-col items-center mt-16 px-6 w-full">
+    <div className="flex flex-col items-center  mt-10  mb-28 px-6 w-full">
       {/* Search Bar Container */}
       <div className="relative bg-white/80 backdrop-blur-lg shadow-lg rounded-2xl p-4 w-full max-w-3xl flex flex-col md:flex-row items-center border border-gray-200 space-y-3 md:space-y-0 md:space-x-4">
         
