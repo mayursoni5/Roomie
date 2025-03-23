@@ -15,7 +15,7 @@ const Navbar = () => {
           Listings
         </button>
 
-        <button className="bg-green-500 text-white px-6 sm:px-8 py-2 sm:py-3 w-28 sm:w-36 rounded-full 
+        <button  onClick={console.log("h")}className="bg-green-500 text-white px-6 sm:px-8 py-2 sm:py-3 w-28 sm:w-36 rounded-full 
                            hover:bg-green-600 hover:scale-105 hover:shadow-lg 
                            hover:shadow-green-500/50 transition duration-300 ease-in-out">
           Get Started
