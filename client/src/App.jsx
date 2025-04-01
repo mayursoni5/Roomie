@@ -4,11 +4,8 @@ import { apiClient } from "./lib/api-client";
 import Profile from "./pages/profile/Profile";
 import Dashboard from "./pages/dashboard/Dashboard";
 import { useAppStore } from "./store";
-import Navbar from '@/components/Navbar'
-// import Home from "./pages/Landing/Home";
-
-
-
+import Navbar from "@/components/Navbar";
+import Home from "./pages/Landing/Home";
 
 const PrivateRoute = ({ children }) => {
   const { userInfo } = useAppStore();
@@ -21,9 +18,6 @@ const PrivateRoute = ({ children }) => {
 //   const isAuthenticated = !!userInfo;
 //   return isAuthenticated ? <Navigate to={"/dashboard"} /> : children;
 // };
-
-
-
 
 function App() {
   const { userInfo, setUserInfo } = useAppStore();
@@ -61,40 +55,37 @@ function App() {
   return (
     <>
       <BrowserRouter>
-    
-      
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Navbar /> <Home />
+              </>
+            }
+          />
+          <Route path="/auth" element={<Auth />} />
 
-      <Routes>
-        
-        <Route path="/" element={<>
-      <Navbar /> <Home /></>} />
-        <Route path="/auth" element={<Auth />} />
-        
-        
-        <Route 
-          path="/profile" 
-          element={
-            <PrivateRoute>
-              <Profile />
-            </PrivateRoute>
-          } 
-        />
-        <Route 
-          path="/dashboard" 
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          } 
-        />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
 
-       
-      
-
-       
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
