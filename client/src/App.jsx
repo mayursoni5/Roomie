@@ -6,6 +6,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import { useAppStore } from "./store";
 import Navbar from "@/components/Navbar";
 import Home from "./pages/Landing/Home";
+import Alllisting from "./pages/listings/allListing";
 
 const PrivateRoute = ({ children }) => {
   const { userInfo } = useAppStore();
@@ -65,6 +66,7 @@ function App() {
             }
           />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/Listing" element={<Alllisting />} />
 
           <Route
             path="/profile"
