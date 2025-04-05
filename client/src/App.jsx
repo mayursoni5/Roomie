@@ -7,6 +7,7 @@ import { useAppStore } from "./store";
 import Navbar from "@/components/Navbar";
 import Home from "./pages/Landing/Home";
 import Alllisting from "./pages/listings/allListing";
+import ListingDetails from "./pages/listings/ListingDetails";
 
 const PrivateRoute = ({ children }) => {
   const { userInfo } = useAppStore();
@@ -67,6 +68,10 @@ function App() {
           />
           <Route path="/auth" element={<Auth />} />
           <Route path="/Listing" element={<Alllisting />} />
+          <Route path="/Listing/:id" element={<> 
+          <Navbar/>
+            <ListingDetails />
+          </>} />
 
           <Route
             path="/profile"
