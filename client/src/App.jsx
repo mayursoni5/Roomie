@@ -5,7 +5,7 @@ import Profile from "./pages/profile/Profile";
 import Dashboard from "./pages/dashboard/Dashboard";
 import { useAppStore } from "./store";
 import Navbar from "@/components/Navbar";
-import Home from "./pages/Landing/Home";
+import Home from "./pages/landing/Home";
 
 const PrivateRoute = ({ children }) => {
   const { userInfo } = useAppStore();

@@ -251,8 +251,8 @@ const ProfileSetup = () => {
             </div>
           </div>
         </CardContent>
-        <CardFooter>
-          <Button className="w-full bg-green-500 hover:bg-green-600 rounded-full">
+        <CardFooter className="flex items-center justify-center">
+          <Button className="w-[50%] text-lg bg-green-500 hover:bg-green-600 rounded-full">
             Register
           </Button>
         </CardFooter>
