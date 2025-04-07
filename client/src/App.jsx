@@ -5,6 +5,8 @@ import Profile from "./pages/profile/Profile";
 import Dashboard from "./pages/dashboard/Dashboard";
 import { useAppStore } from "./store";
 import Navbar from "@/components/Navbar";
+
+import Alllisting from "./pages/listings/allListing";
 import Home from "./pages/landing/Home";
 
 const PrivateRoute = ({ children }) => {
@@ -65,6 +67,7 @@ function App() {
             }
           />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/Listing" element={<Alllisting />} />
 
           <Route
             path="/profile"
