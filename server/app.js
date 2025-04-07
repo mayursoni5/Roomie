@@ -6,8 +6,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/AuthRoute.js";
 import listingRoutes from "./routes/listingRoutes.js";
 
-import bookingRoutes from "./routes/bookingRoutes.js"
-
+import bookingRoutes from "./routes/bookingRoutes.js";
 
 dotenv.config();
 
@@ -26,11 +25,13 @@ app.use(
 app.use(cookieParser());
 app.use(expess.json());
 
+app.get("/", (req, res) => {
+  res.json({ msg: "Hello Roomie" });
+});
 app.use("/api/auth", authRoutes);
-app.use("/api/listings", listingRoutes); 
+app.use("/api/listings", listingRoutes);
 
-app.use("/api/bookings",bookingRoutes)
-
+app.use("/api/bookings", bookingRoutes);
 
 app.listen(port, () => {
   console.log(`The Server is running on ${port}`);

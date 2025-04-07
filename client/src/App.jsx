@@ -6,7 +6,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import { useAppStore } from "./store";
 import Navbar from "@/components/Navbar";
 
-import Alllisting from "./pages/listings/allListing";
+import Alllisting from "./pages/listings/Alllisting";
 import Home from "./pages/landing/Home";
 
 const PrivateRoute = ({ children }) => {
