@@ -10,7 +10,7 @@ import { useAppStore } from "@/store";
 
 export default function Auth() {
   const navigate = useNavigate();
-  const { setUserInfo } = useAppStore();
+  const { setUserInfo, userInfo } = useAppStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -58,7 +58,6 @@ export default function Auth() {
           navigate("/profile");
         }
       }
-      console.log(res);
     }
   };
 

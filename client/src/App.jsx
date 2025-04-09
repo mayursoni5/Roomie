@@ -9,12 +9,6 @@ import Navbar from "@/components/Navbar";
 import Alllisting from "./pages/listings/Alllisting";
 import Home from "./pages/landing/Home";
 
-const PrivateRoute = ({ children }) => {
-  const { userInfo } = useAppStore();
-  const isAuthenticated = !!userInfo;
-  return isAuthenticated ? children : <Navigate to={"/auth"} />;
-};
-
 // const AuthRoute = ({ children }) => {
 //   const { userInfo } = useAppStore();
 //   const isAuthenticated = !!userInfo;
@@ -24,6 +18,11 @@ const PrivateRoute = ({ children }) => {
 function App() {
   const { userInfo, setUserInfo } = useAppStore();
   // const [loading, setLoading] = useState(true);
+  const PrivateRoute = ({ children }) => {
+    const { userInfo } = useAppStore();
+    const isAuthenticated = !!userInfo;
+    return isAuthenticated ? children : <Navigate to={"/auth"} />;
+  };
 
   // useEffect(() => {
   //   const getUserData = async () => {
@@ -62,7 +61,8 @@ function App() {
             path="/"
             element={
               <>
-                <Navbar /> <Home />
+                <Navbar />
+                <Home />
               </>
             }
           />
