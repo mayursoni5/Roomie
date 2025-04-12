@@ -53,7 +53,7 @@ export default function Auth() {
       if (res.data.user.id) {
         setUserInfo(res.data.user);
         if (res.data.user.profileSetup) {
-          navigate("/dashboard");
+          navigate("/listing");
         } else {
           navigate("/profile");
         }

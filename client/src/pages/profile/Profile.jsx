@@ -64,7 +64,7 @@ const ProfileSetup = () => {
 
       if (res.status === 200 && res.data) {
         toast.success("Profile updated successfully.");
-        navigate("/Listing");
+        navigate("/looking-for");
       }
     } catch (error) {
       console.log(error);
@@ -72,9 +72,18 @@ const ProfileSetup = () => {
     }
   };
 
+  const logoNavigation = () => {
+    navigate("/");
+  };
+
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-white p-4">
-      <img className="mb-5" src={roomieLogo} alt="Roomie Logo" />
+      <img
+        className="mb-5"
+        src={roomieLogo}
+        alt="Roomie Logo"
+        onClick={logoNavigation}
+      />
 
       <Card className="w-full max-w-4xl">
         <CardHeader>

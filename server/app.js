@@ -5,8 +5,8 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/AuthRoute.js";
 import listingRoutes from "./routes/listingRoutes.js";
-
 import bookingRoutes from "./routes/bookingRoutes.js";
+import roomRoutes from "./routes/roomRoutes.js";
 
 dotenv.config();
 
@@ -29,8 +29,8 @@ app.get("/", (req, res) => {
   res.json({ msg: "Hello Roomie" });
 });
 app.use("/api/auth", authRoutes);
+app.use("/api/rooms", roomRoutes);
 app.use("/api/listings", listingRoutes);
-
 app.use("/api/bookings", bookingRoutes);
 
 app.listen(port, () => {

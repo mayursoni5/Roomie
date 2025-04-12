@@ -120,3 +120,34 @@ export const updateProfile = async (req, res, next) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const updateLookingFor = async (req, res, next) => {
+  try {
+    const { userId } = req;
+    const { lookingfor } = req.body;
+
+    if (!lookingfor) {
+      return res.status(400).json({ message: "Data is not provieded." });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        lookingfor,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    return res.status(200).json({ userData: updatedUser });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
