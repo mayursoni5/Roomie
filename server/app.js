@@ -4,9 +4,9 @@ import cors from "cors";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/AuthRoute.js";
+import roomRoutes from "./routes/RoomRoutes.js";
 import listingRoutes from "./routes/listingRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
-import roomRoutes from "./routes/roomRoutes.js";
 
 dotenv.config();
 
