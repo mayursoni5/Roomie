@@ -51,6 +51,7 @@ export default function Auth() {
         { withCredentials: true }
       );
       if (res.data.user.id) {
+        localStorage.setItem("userId", res.data.user.id);
         setUserInfo(res.data.user);
         if (res.data.user.profileSetup) {
           navigate("/dashboard");
@@ -70,6 +71,8 @@ export default function Auth() {
         { withCredentials: true }
       );
       if (res.status === 201) {
+
+        localStorage.setItem("userId", res.data.user.id);
         setUserInfo(res.data.user);
         toast.success("Signup successful!");
         navigate("/profile");

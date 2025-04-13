@@ -10,7 +10,9 @@ import Alllisting from "./pages/listings/allListing";
 import ListingDetails from "./pages/listings/ListingDetails";
 
 const PrivateRoute = ({ children }) => {
-  const { userInfo } = useAppStore();
+  const { 
+    
+    userInfo } = useAppStore();
   const isAuthenticated = !!userInfo;
   return isAuthenticated ? children : <Navigate to={"/auth"} />;
 };

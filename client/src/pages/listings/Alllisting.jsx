@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, DollarSign, Users, Search, Filter, Calendar, Phone, Mail } from "lucide-react";
+import { MapPin, DollarSign, Users, Search, Filter, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 
@@ -18,7 +18,9 @@ export default function Alllisting() {
   const [locationQuery, setLocationQuery] = useState("");
   const [showGenderOptions, setShowGenderOptions] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
 
+  // Fetch listings from the server
   useEffect(() => {
     const fetchListings = async () => {
       setIsLoading(true);
@@ -34,6 +36,13 @@ export default function Alllisting() {
 
     fetchListings();
   }, []);
+
+  // Set locationQuery from URL when component mounts or URL changes
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const locationFromURL = queryParams.get("location") || "";
+    setLocationQuery(locationFromURL);
+  }, [location]);
 
   const getAvatar = (gender) => {
     if (gender === "Male") return maleAvatar;
@@ -51,7 +60,6 @@ export default function Alllisting() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
       <div className="bg-gradient-to-r from-green-50 to-blue-50 pt-8 pb-12 px-6">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold text-center">
@@ -61,20 +69,13 @@ export default function Alllisting() {
             Rooms & Roommates, Made Simple
           </p>
 
-          {/* Filter Bar */}
           <div className="bg-white rounded-xl shadow-md p-4 mb-6">
             <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full md:w-auto">
                 <TabsList className="grid grid-cols-3 bg-gray-100 p-1 rounded-lg w-full">
-                  <TabsTrigger value="explore" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow">
-                    Explore All
-                  </TabsTrigger>
-                  <TabsTrigger value="room" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow">
-                    Room
-                  </TabsTrigger>
-                  <TabsTrigger value="roomie" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow">
-                    Roomie
-                  </TabsTrigger>
+                  <TabsTrigger value="explore" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow">Explore All</TabsTrigger>
+                  <TabsTrigger value="room" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow">Room</TabsTrigger>
+                  <TabsTrigger value="roomie" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow">Roomie</TabsTrigger>
                 </TabsList>
               </Tabs>
 
@@ -125,13 +126,11 @@ export default function Alllisting() {
         </div>
       </div>
 
-      {/* Listings Section */}
       <div className="max-w-6xl mx-auto px-6 py-8">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-xl font-semibold text-gray-800">
             {filteredListings.length} {activeTab === "explore" ? "Listings" : activeTab === "room" ? "Rooms" : "Roomies"} Available
           </h2>
-          
           <p className="text-gray-500 text-sm">
             {selectedGender !== "Any" ? `Filtered by: ${selectedGender}` : ""}
             {locationQuery ? `${selectedGender !== "Any" ? " • " : ""}Location: ${locationQuery}` : ""}
@@ -162,31 +161,20 @@ export default function Alllisting() {
               <Link to={`/listing/${listing._id}`} key={listing._id} className="group">
                 <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 group-hover:border-green-200 h-full">
                   <CardContent className="p-8">
-                    {/* Header with avatar and name */}
                     <div className="flex items-center mb-6">
-                      <img
-                        src={getAvatar(listing.genderPreference)}
-                        alt="Avatar"
-                        className="w-20 h-20 object-cover rounded-full border-2 border-white shadow-md"
-                      />
+                      <img src={getAvatar(listing.genderPreference)} alt="Avatar" className="w-20 h-20 object-cover rounded-full border-2 border-white shadow-md" />
                       <div className="ml-5">
-                        <h3 className="font-bold text-gray-900 group-hover:text-green-600 transition-colors text-xl">
-                          {listing.name}
-                        </h3>
+                        <h3 className="font-bold text-gray-900 group-hover:text-green-600 transition-colors text-xl">{listing.name}</h3>
                         <div className="flex items-center text-sm text-gray-500 mt-1">
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                             listing.type === "room" ? "bg-blue-50 text-blue-600" : "bg-green-50 text-green-600"
-                          }`}>
-                            {listing.type}
-                          </span>
+                          }`}>{listing.type}</span>
                         </div>
                       </div>
                     </div>
-                    
-                    {/* Divider */}
+
                     <div className="border-t border-gray-100 -mx-8 my-6"></div>
-                    
-                    {/* Main Information */}
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                       <div className="flex items-center text-gray-700">
                         <DollarSign size={20} className="text-green-500 mr-3 flex-shrink-0" />
@@ -195,7 +183,6 @@ export default function Alllisting() {
                           <div className="text-sm text-gray-500">per month</div>
                         </div>
                       </div>
-                      
                       <div className="flex items-center text-gray-700">
                         <Users size={20} className="text-green-500 mr-3 flex-shrink-0" />
                         <div>
@@ -203,7 +190,6 @@ export default function Alllisting() {
                           <div className="text-sm text-gray-500">preference</div>
                         </div>
                       </div>
-
                       <div className="flex items-start text-gray-700">
                         <MapPin size={20} className="text-green-500 mr-3 flex-shrink-0 mt-0.5" />
                         <div>
@@ -211,7 +197,6 @@ export default function Alllisting() {
                           <div className="text-sm text-gray-500">location</div>
                         </div>
                       </div>
-
                       <div className="flex items-center text-gray-700">
                         <Calendar size={20} className="text-green-500 mr-3 flex-shrink-0" />
                         <div>
@@ -223,20 +208,15 @@ export default function Alllisting() {
                       </div>
                     </div>
 
-                    {/* Additional Info - Description */}
                     {listing.description && (
                       <div className="mb-6">
                         <p className="text-gray-600 line-clamp-2">
-                          {listing.description || "Comfortable living space with all amenities included. Great neighborhood with easy access to transportation."}
+                          {listing.description}
                         </p>
                       </div>
                     )}
 
-                    {/* Contact Info */}
                     <div className="border-t border-gray-100 -mx-8 my-6"></div>
-                    <div className="flex justify-between items-center">
-                     
-                    </div>
                   </CardContent>
                 </Card>
               </Link>
