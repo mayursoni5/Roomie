@@ -1,5 +1,6 @@
 import Listing from "../models/ListingModel.js";
 import mongoose from "mongoose";
+import Room from "../models/RoomModel.js";
 
 /**
  * @desc    Create a new listing
@@ -55,7 +56,7 @@ export const getListingById = async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid Listing ID" });
     }
 
-    const listing = await Listing.findById(id).populate("owner", "name email");
+    const listing = await Room.findById(id);
 
     if (!listing) {
       return res.status(404).json({ success: false, message: "Listing not found" });

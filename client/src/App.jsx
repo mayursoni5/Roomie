@@ -1,61 +1,18 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Auth from "./pages/auth/Auth";
-import { apiClient } from "./lib/api-client";
 import Profile from "./pages/profile/Profile";
 import Dashboard from "./pages/dashboard/Dashboard";
-import { useAppStore } from "./store";
 import Navbar from "@/components/Navbar";
+import Alllisting from "./pages/listings/Alllisting";
 import Home from "./pages/Landing/Home";
-import Alllisting from "./pages/listings/allListing";
+import LookingFor from "./pages/looking-for/LookingFor";
+import RoomForm from "./pages/rooms/CreateRoom";
 import ListingDetails from "./pages/listings/ListingDetails";
+import RoommateDetails from "./pages/listings/RoomateDetails";
 
-const PrivateRoute = ({ children }) => {
-  const { 
-    
-    userInfo } = useAppStore();
-  const isAuthenticated = !!userInfo;
-  return isAuthenticated ? children : <Navigate to={"/auth"} />;
-};
 
-// const AuthRoute = ({ children }) => {
-//   const { userInfo } = useAppStore();
-//   const isAuthenticated = !!userInfo;
-//   return isAuthenticated ? <Navigate to={"/dashboard"} /> : children;
-// };
 
 function App() {
-  const { userInfo, setUserInfo } = useAppStore();
-  // const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   const getUserData = async () => {
-  //     try {
-  //       const res = await apiClient.get(GET_USER_INFO, {
-  //         withCredentials: true,
-  //       });
-  //       if (res.status === 200 && res.data.id) {
-  //         setUserInfo(res.data);
-  //       } else {
-  //         setUserInfo(undefined);
-  //       }
-  //       console.log(res);
-  //     } catch (error) {
-  //       setUserInfo(undefined);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   if (!userInfo) {
-  //     getUserData();
-  //   } else {
-  //     setLoading(false);
-  //   }
-  // }, [userInfo, setUserInfo]);
-
-  // if (loading) {
-  //   return <div>Loading....</div>;
-  // }
-
   return (
     <>
       <BrowserRouter>
@@ -64,39 +21,31 @@ function App() {
             path="/"
             element={
               <>
-                <Navbar /> <Home />
+                <Navbar />
+                <Home />
               </>
             }
           />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/Listing" element={<Alllisting />} />
-          <Route path="/Listing/:id" element={<> 
+          <Route path="/listing" element={<Alllisting />} />
+          <Route path="/looking-for" element={<LookingFor />} />
+          <Route path="/create-room" element={<RoomForm />} />
+
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+
+          <Route path="*" element={<Navigate to="/" />} />
+
+          <Route path="/profile/:id" element={<RoommateDetails/>} />
+
+          <Route path="/listing/:id" element={<> 
           <Navbar/>
             <ListingDetails />
           </>} />
-
-          <Route
-            path="/profile"
-            element={
-              <PrivateRoute>
-                <Profile />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
-
-          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
     </>
   );
-}
+}``
 
 export default App;

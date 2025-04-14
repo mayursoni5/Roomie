@@ -4,8 +4,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Phone, MessageSquare, Users, DollarSign } from "lucide-react";
 import axios from "axios";
-import ChatBox from "@/components/Chat/ChatBox";
-
+import ChatBox from "@/components/chat/ChatBox";
+import Cookies from "js-cookie";
 // Avatar images
 import placeholderImage from "../../assets/Male_avatar_2.png";
 import maleAvatar from "../../assets/Male_avatar_1.png";
@@ -16,19 +16,20 @@ export default function ListingDetails() {
   const [listing, setListing] = useState(null);
   const [showChat, setShowChat] = useState(false);
   const [receiverId, setReceiverId] = useState(null);
-
-  const senderId = localStorage.getItem("userId");
+  const senderId = Cookies.get("jwt");  
+  console.log(senderId);
+  
+  
 
   useEffect(() => {
     const fetchListingDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/listings/${id}`);
-        setListing(response.data.data);
+        const response = await axios.get(`http://localhost:3000/api/rooms/${id}`);
+        setListing(response.data.room);
       } catch (error) {
         console.error("Error fetching listing details:", error.message);
       }
     };
-
     fetchListingDetails();
   }, [id]);
 
@@ -37,11 +38,13 @@ export default function ListingDetails() {
     if (gender === "Female") return femaleAvatar;
     return placeholderImage;
   };
-
   const handleChatOpen = () => {
-    setReceiverId(listing.owner); // Set the listing owner's ID as the receiver
-    setShowChat(true);
+    if (listing && listing.createdBy && listing.createdBy._id) {
+      setReceiverId(listing.createdBy._id);  // Correct: Owner's user ID from createdBy
+      setShowChat(true);
+    }
   };
+  
 
   if (!listing) {
     return <div className="text-center text-lg py-10">Loading...</div>;
@@ -110,13 +113,14 @@ export default function ListingDetails() {
             </div>
             <div className="flex items-center gap-2">
               <Users size={16} className="text-green-500" />
-              Looking For: <span className="font-semibold">{listing.genderPreference}</span>
+              Looking For:
+              <span className="font-semibold">{listing.genderPreference}</span>
             </div>
-          </div>
+          </div>                                                                                                                      
         </div>
       </div>
 
-      {/* Chat Box Component */}
+      {/* Chat Box shows only when user clicks "Chat" */}
       {showChat && receiverId && (
         <ChatBox
           senderId={senderId}

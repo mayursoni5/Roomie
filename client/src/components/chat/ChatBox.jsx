@@ -1,42 +1,101 @@
-// src/components/Chat/ChatBox.jsx
 import { useEffect, useState } from "react";
 import socket from "./socket";
 import axios from "axios";
 
-export default function ChatBox({ senderId, receiverId, onClose }) {
+function getUserIdFromCookie() {
+  const match = document.cookie.match(new RegExp('(^| )jwt=([^;]+)'));
+  if (!match) return null;
+
+  const token = match[2];
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.userId;
+  } catch (err) {
+    console.error("Error decoding JWT:", err);
+    return null;
+  }
+}
+
+export default function ChatBox({ receiverId, onClose }) {
+  const senderId = getUserIdFromCookie();
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
 
+  // Fetch chat history when the component mounts
   useEffect(() => {
     const fetchMessages = async () => {
-      const res = await axios.get(`http://localhost:3000/api/chat/${senderId}/${receiverId}`);
-      setChat(res.data.messages);
+      if (!senderId || !receiverId) return;
+
+      try {
+        const res = await axios.get(`http://localhost:3000/api/chat/${senderId}/${receiverId}`);
+        setChat(res.data.messages);
+        console.log("Fetched chat history:", res.data.messages);
+      } catch (err) {
+        console.error("Error fetching chat history:", err);
+      }
     };
+
     fetchMessages();
   }, [senderId, receiverId]);
 
   useEffect(() => {
-    socket.emit("addUser", senderId);
+    if (!senderId) return;
 
-    socket.on("receiveMessage", (msg) => {
-      if (msg.senderId === receiverId) {
-        setChat((prev) => [...prev, msg]);
-      }
+    // Debug connection
+    socket.on("connect", () => {
+      console.log("Connected to Socket.io server:", socket.id);
     });
 
-    return () => socket.off("receiveMessage");
-  }, [receiverId, senderId]);
+    socket.emit("addUser", senderId);
+    console.log("addUser event sent with:", senderId);
 
+    // Listen for incoming messages
+    socket.on("receiveMessage", (msg) => {
+      console.log("New message received via socket:", msg);
+      setChat((prev) => {
+        // Prevent duplicate messages by checking the message _id
+        if (!prev.some((item) => item._id === msg._id)) {
+          return [...prev, msg];
+        }
+        return prev;
+      });
+    });
+
+    // Clean up the socket listener when the component unmounts
+    return () => {
+      socket.off("receiveMessage");
+      console.log("ChatBox unmounted & receiveMessage listener removed.");
+    };
+  }, [senderId]);
+
+  // Handling message input and send action
   const sendMessage = async () => {
-    if (!message.trim()) return;
+    if (!message.trim() || !senderId || !receiverId) return;
 
     const msgObj = { senderId, receiverId, message };
+    console.log("Sending message via axios and socket:", msgObj);
 
-    await axios.post("http://localhost:3000/api/chat/send", msgObj);
-    socket.emit("sendMessage", msgObj);
-    setChat((prev) => [...prev, msgObj]);
-    setMessage("");
+    try {
+      // Save the message to the server (optional)
+      await axios.post("http://localhost:3000/api/chat/send", msgObj);
+
+      // Emit the message to the receiver via socket
+      socket.emit("sendMessage", msgObj);
+
+      // Immediately update chat UI with the sent message
+      setChat((prev) => [...prev, { ...msgObj, createdAt: new Date().toISOString() }]);
+
+      // Clear input field after sending the message
+      setMessage("");
+    } catch (err) {
+      console.error("Error sending message:", err);
+    }
   };
+
+  // Re-render the UI whenever the chat state changes
+  useEffect(() => {
+    console.log("Chat state updated:", chat);
+  }, [chat]);
 
   return (
     <div className="fixed bottom-4 right-4 w-80 bg-white border rounded-lg shadow-lg p-4">

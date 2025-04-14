@@ -3,17 +3,10 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
-import http from "http"; // For creating the server
-import { Server } from "socket.io"; // For real-time communication
-import { initSocket } from "./socket.js";
-
-
-// Routes
 import authRoutes from "./routes/AuthRoute.js";
+import roomRoutes from "./routes/RoomRoutes.js";
 import listingRoutes from "./routes/listingRoutes.js";
-import bookingRoutes from "./routes/bookingRoutes.js";
-import chatRoutes from "./routes/chatRoutes.js";
-
+import getroomiesRoutes from "./routes/getroomiesRoutes.js"
 
 dotenv.config();
 
@@ -34,28 +27,16 @@ app.use(
 app.use(cookieParser()); // Parse cookies
 app.use(express.json()); // Parse incoming JSON data
 
-// Mount API routes
-app.use("/api/auth", authRoutes);
-app.use("/api/listings", listingRoutes);
-app.use("/api/bookings", bookingRoutes);
-app.use("/api/chat", chatRoutes);
-
-// Create HTTP server and integrate with socket.io
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: process.env.ORIGIN,
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
+app.get("/", (req, res) => {
+  res.json({ msg: "Hello Roomie" });
 });
+app.use("/api/auth", authRoutes);
+app.use("/api/rooms", roomRoutes);
+app.use("/api/roomies",getroomiesRoutes)
+app.use("/api/listings", listingRoutes);
 
-// Initialize socket handling
-initSocket(io);
-
-// Start server
-server.listen(port, () => {
-  console.log(`✅ Server is running on http://localhost:${port}`);
+app.listen(port, () => {
+  console.log(`The Server is running on ${port}`);
 });
 
 // Connect to MongoDB

@@ -12,13 +12,13 @@ const createToken = (email, userId) => {
 
 export const signup = async (req, res, next) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).send("All fields are required");
     }
 
-    const user = await User.create({ name, email, password, role });
+    const user = await User.create({  email, password });
 
     res.cookie("jwt", createToken(email, user.id), {
       maxAge,
@@ -85,3 +85,76 @@ export const logout = async (req, res, next) => {
     return res.status(500).send("Internal Server Error");
   }
 };
+
+export const updateProfile = async (req, res, next) => {
+  try {
+    const { userId } = req; // Ensure userId is attached via middleware (like auth)
+    const { userName, gender, city, contactNumber } = req.body;
+    console.log(req.body);
+    
+
+    if (!userName || !gender || !city || !contactNumber) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        userName,
+        gender,
+        city,
+        contactNumber,
+        profileSetup: true,
+      },
+      {
+        new: true, // Return the updated document
+        runValidators: true, // Run schema validation
+      }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    return res.status(200).json({ userData: updatedUser });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const updateLookingFor = async (req, res, next) => {
+  try {
+    const { userId } = req;
+    const { lookingfor } = req.body;
+
+    if (!lookingfor) {
+      return res.status(400).json({ message: "Data is not provieded." });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        lookingfor,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    return res.status(200).json({ userData: updatedUser });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+
+
+
