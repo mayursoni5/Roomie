@@ -3,6 +3,7 @@ import Room from "../models/RoomModel.js";
 export const createRoom = async (req, res) => {
   try {
     const {
+      name,
       title,
       description,
       address,
@@ -15,6 +16,7 @@ export const createRoom = async (req, res) => {
     const createdBy = userId; // assuming you have verifyToken middleware to attach user
 
     const newRoom = new Room({
+      name,
       title,
       description,
       address,

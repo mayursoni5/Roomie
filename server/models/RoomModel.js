@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const roomSchema = new mongoose.Schema(
   {
+    name:{
+      type:String,
+      required: [true, "Room title is required"],
+    },
     title: {
       type: String,
       required: [true, "Room title is required"],

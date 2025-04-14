@@ -1,6 +1,6 @@
-import Listing from "../models/ListingModel.js"; // Ensure .js is included
+import Listing from "../models/ListingModel.js";
 import mongoose from "mongoose";
-
+import Room from "../models/RoomModel.js";
 
 /**
  * @desc    Create a new listing
@@ -9,16 +9,17 @@ import mongoose from "mongoose";
  */
 export const createListing = async (req, res) => {
   try {
-    const { title, description, location, price, capacity } = req.body;
+    const { name, location, rent, type, genderPreference, capacity } = req.body;
 
-    // Ensure owner is attached from the authenticated user
     const newListing = await Listing.create({
-      title,
-      description,
+      name,
+    
       location,
-      price,
+      rent,
+      type,
+      genderPreference,
       capacity,
-      owner: req.user._id, // Assign logged-in user as owner
+      owner: req.user._id,
     });
 
     res.status(201).json({ success: true, message: "Listing created", listing: newListing });
@@ -34,7 +35,7 @@ export const createListing = async (req, res) => {
  */
 export const getAllListings = async (req, res) => {
   try {
-    const listings = await Listing.find().populate("owner", "name email");
+    const listings = await Listing.find()
     res.status(200).json({ success: true, listings });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -46,18 +47,16 @@ export const getAllListings = async (req, res) => {
  * @route   GET /api/listings/:id
  * @access  Public
  */
-
 export const getListingById = async (req, res) => {
   try {
     let { id } = req.params;
-    id = id.trim(); // ✅ Trim whitespace and newlines
+    id = id.trim();
 
-    // ✅ Check if ID is a valid MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ success: false, message: "Invalid Listing ID" });
     }
 
-    const listing = await Listing.findById(id).populate("owner", "name email");
+    const listing = await Room.findById(id);
 
     if (!listing) {
       return res.status(404).json({ success: false, message: "Listing not found" });
@@ -68,16 +67,6 @@ export const getListingById = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-
-
-
-
-
-
-
-
-
-
 
 /**
  * @desc    Update a listing by ID (Only Owner)
@@ -92,7 +81,6 @@ export const updateListing = async (req, res) => {
       return res.status(404).json({ success: false, message: "Listing not found" });
     }
 
-    // Ensure only the owner can update
     if (listing.owner.toString() !== req.user._id.toString()) {
       return res.status(403).json({ success: false, message: "You are not authorized to update this listing" });
     }
@@ -117,7 +105,6 @@ export const deleteListing = async (req, res) => {
       return res.status(404).json({ success: false, message: "Listing not found" });
     }
 
-    // Ensure only the owner can delete
     if (listing.owner.toString() !== req.user._id.toString()) {
       return res.status(403).json({ success: false, message: "You are not authorized to delete this listing" });
     }

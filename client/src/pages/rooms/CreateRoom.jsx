@@ -17,6 +17,7 @@ import { CREATE_ROOM_ROUTE } from "@/utils/constants";
 
 const RoomForm = () => {
   const [formData, setFormData] = useState({
+    name:"",
     title: "",
     description: "",
     address: "",
@@ -36,9 +37,9 @@ const RoomForm = () => {
   };
 
   const handleSubmit = async () => {
-    const { title, description, address, city, rent } = formData;
+    const { name,title, description, address, city, rent } = formData;
 
-    if (!title || !description || !address || !city || !rent) {
+    if (!name|| !title || !description || !address || !city || !rent) {
       toast.error("Please fill all required fields.");
       return;
     }
@@ -69,6 +70,17 @@ const RoomForm = () => {
 
         <CardContent className="w-full flex flex-col gap-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+          <div className="flex flex-col gap-1">
+              <Label htmlFor="title">Name</Label>
+              <Input
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Cozy 1BHK near MG Road"
+              />
+            </div>
             <div className="flex flex-col gap-1">
               <Label htmlFor="title">Title</Label>
               <Input
