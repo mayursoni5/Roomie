@@ -12,13 +12,13 @@ const createToken = (email, userId) => {
 
 export const signup = async (req, res, next) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).send("All fields are required");
     }
 
-    const user = await User.create({ name, email, password, role });
+    const user = await User.create({  email, password });
 
     res.cookie("jwt", createToken(email, user.id), {
       maxAge,
@@ -90,6 +90,8 @@ export const updateProfile = async (req, res, next) => {
   try {
     const { userId } = req; // Ensure userId is attached via middleware (like auth)
     const { userName, gender, city, contactNumber } = req.body;
+    console.log(req.body);
+    
 
     if (!userName || !gender || !city || !contactNumber) {
       return res.status(400).json({ message: "All fields are required." });
@@ -151,3 +153,8 @@ export const updateLookingFor = async (req, res, next) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+
+
+
+

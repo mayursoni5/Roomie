@@ -65,6 +65,8 @@ const ProfileSetup = () => {
       if (res.status === 200 && res.data) {
         toast.success("Profile updated successfully.");
         navigate("/looking-for");
+        console.log(formData);
+        
       }
     } catch (error) {
       console.log(error);
