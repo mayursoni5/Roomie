@@ -9,7 +9,7 @@ import { apiClient } from "@/lib/api-client";
 import { HOST } from "@/utils/constants";
 import Cookies from "js-cookie";
 import placeholderImage from "../../assets/male_avatar_2.png";
-import maleAvatar from "../../assets/male_avatar_1.png";
+import maleAvatar from "../../assets/Male_avatar_1.png";
 import femaleAvatar from "../../assets/female_avatar_1.png";
 
 export default function ListingDetails() {
