@@ -18,8 +18,8 @@ import { useNavigate } from "react-router-dom";
 import { apiClient } from "@/lib/api-client";
 import { HOST, GET_ALL_ROOMS_ROUTE } from "@/utils/constants";
 
-import placeholderImage from "../../assets/Male_avatar_2.png";
-import maleAvatar from "../../assets/Male_avatar_1.png";
+import placeholderImage from "../../assets/male_avatar_2.png";
+import maleAvatar from "../../assets/male_avatar_1.png";
 import femaleAvatar from "../../assets/female_avatar_1.png";
 
 export default function Alllisting() {
