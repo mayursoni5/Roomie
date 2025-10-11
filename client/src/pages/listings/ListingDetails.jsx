@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Phone, MessageSquare, Users, DollarSign } from "lucide-react";
 import axios from "axios";
 import ChatBox from "@/components/chat/ChatBox";
+import { apiClient } from "@/lib/api-client";
+import { HOST } from "@/utils/constants";
 import Cookies from "js-cookie";
-// Avatar images
 import placeholderImage from "../../assets/Male_avatar_2.png";
 import maleAvatar from "../../assets/Male_avatar_1.png";
 import femaleAvatar from "../../assets/female_avatar_1.png";
@@ -16,15 +17,13 @@ export default function ListingDetails() {
   const [listing, setListing] = useState(null);
   const [showChat, setShowChat] = useState(false);
   const [receiverId, setReceiverId] = useState(null);
-  const senderId = Cookies.get("jwt");  
+  const senderId = Cookies.get("jwt");
   console.log(senderId);
-  
-  
 
   useEffect(() => {
     const fetchListingDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/rooms/${id}`);
+        const response = await apiClient.get(`/api/rooms/${id}`);
         setListing(response.data.room);
       } catch (error) {
         console.error("Error fetching listing details:", error.message);
@@ -40,11 +39,10 @@ export default function ListingDetails() {
   };
   const handleChatOpen = () => {
     if (listing && listing.createdBy && listing.createdBy._id) {
-      setReceiverId(listing.createdBy._id);  // Correct: Owner's user ID from createdBy
+      setReceiverId(listing.createdBy._id); // Correct: Owner's user ID from createdBy
       setShowChat(true);
     }
   };
-  
 
   if (!listing) {
     return <div className="text-center text-lg py-10">Loading...</div>;
@@ -60,7 +58,8 @@ export default function ListingDetails() {
       </p>
 
       <div className="text-gray-500 text-sm">
-        Home / Looking for {listing.type === "room" ? "Room" : "Roommate"} / {listing.name}
+        Home / Looking for {listing.type === "room" ? "Room" : "Roommate"} /{" "}
+        {listing.name}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
@@ -101,7 +100,8 @@ export default function ListingDetails() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 text-gray-700">
             <div className="flex items-center gap-2">
               <Users size={16} className="text-green-500" />
-              Gender: <span className="font-semibold">{listing.genderPreference}</span>
+              Gender:{" "}
+              <span className="font-semibold">{listing.genderPreference}</span>
             </div>
             <div className="flex items-center gap-2">
               <DollarSign size={16} className="text-green-500" />
@@ -109,14 +109,15 @@ export default function ListingDetails() {
             </div>
             <div className="flex items-center gap-2">
               <Users size={16} className="text-green-500" />
-              Occupancy: <span className="font-semibold">{listing.occupancy}</span>
+              Occupancy:{" "}
+              <span className="font-semibold">{listing.occupancy}</span>
             </div>
             <div className="flex items-center gap-2">
               <Users size={16} className="text-green-500" />
               Looking For:
               <span className="font-semibold">{listing.genderPreference}</span>
             </div>
-          </div>                                                                                                                      
+          </div>
         </div>
       </div>
 

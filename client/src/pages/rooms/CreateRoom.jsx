@@ -17,7 +17,7 @@ import { CREATE_ROOM_ROUTE } from "@/utils/constants";
 
 const RoomForm = () => {
   const [formData, setFormData] = useState({
-    name:"",
+    name: "",
     title: "",
     description: "",
     address: "",
@@ -37,17 +37,27 @@ const RoomForm = () => {
   };
 
   const handleSubmit = async () => {
-    const { name,title, description, address, city, rent } = formData;
+    const { name, title, description, address, city, rent } = formData;
 
-    if (!name|| !title || !description || !address || !city || !rent) {
+    if (!name || !title || !description || !address || !city || !rent) {
       toast.error("Please fill all required fields.");
       return;
     }
 
+    const roomData = {
+      ...formData,
+      availableFrom: formData.availableFrom || new Date().toISOString(),
+    };
+
     try {
-      const res = await apiClient.post(CREATE_ROOM_ROUTE, formData, {
+      toast.info("Submitting room data...");
+
+      console.log("Sending room data:", roomData);
+      const res = await apiClient.post(CREATE_ROOM_ROUTE, roomData, {
         withCredentials: true,
       });
+
+      console.log("Response:", res);
 
       if (res.status === 201) {
         toast.success("Room created successfully!");
@@ -55,7 +65,31 @@ const RoomForm = () => {
       }
     } catch (error) {
       console.error("Error creating room:", error);
-      toast.error("Something went wrong!");
+
+      if (error.response) {
+        console.log("Error data:", error.response.data);
+        console.log("Error status:", error.response.status);
+
+        if (error.response.status === 401) {
+          toast.error(
+            "You must be logged in to create a room. Please log in and try again."
+          );
+
+          navigate("/auth");
+          return;
+        }
+
+        toast.error(
+          error.response.data.message || "Server error. Please try again."
+        );
+      } else if (error.request) {
+        console.log("No response received:", error.request);
+        toast.error(
+          "No response from server. Please check your internet connection."
+        );
+      } else {
+        toast.error("Error setting up request: " + error.message);
+      }
     }
   };
 
@@ -70,8 +104,7 @@ const RoomForm = () => {
 
         <CardContent className="w-full flex flex-col gap-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-
-          <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1">
               <Label htmlFor="title">Name</Label>
               <Input
                 id="name"

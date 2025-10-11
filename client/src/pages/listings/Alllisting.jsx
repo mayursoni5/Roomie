@@ -2,12 +2,22 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, DollarSign, Users, Search, Filter, Home, CalendarClock, User, BadgeCheck } from "lucide-react";
+import {
+  MapPin,
+  DollarSign,
+  Users,
+  Search,
+  Filter,
+  Home,
+  CalendarClock,
+  User,
+  BadgeCheck,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { apiClient } from "@/lib/api-client";
+import { HOST, GET_ALL_ROOMS_ROUTE } from "@/utils/constants";
 
-// Avatar images
 import placeholderImage from "../../assets/Male_avatar_2.png";
 import maleAvatar from "../../assets/Male_avatar_1.png";
 import femaleAvatar from "../../assets/female_avatar_1.png";
@@ -26,8 +36,11 @@ export default function Alllisting() {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/rooms");
-        const roomsData = response.data.rooms.map(room => ({ ...room, type: "room" }));
+        const response = await apiClient.get(GET_ALL_ROOMS_ROUTE);
+        const roomsData = response.data.rooms.map((room) => ({
+          ...room,
+          type: "room",
+        }));
         setRooms(roomsData);
       } catch (error) {
         console.error("Error fetching rooms:", error.message);
@@ -36,8 +49,11 @@ export default function Alllisting() {
 
     const fetchRoommates = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/roomies/getroommates");
-        const roommatesData = response.data.roommates.map(user => ({ ...user, type: "roomie" }));
+        const response = await apiClient.get("/api/roomies/getroommates");
+        const roommatesData = response.data.roommates.map((user) => ({
+          ...user,
+          type: "roomie",
+        }));
         setRoommates(roommatesData);
       } catch (error) {
         console.error("Error fetching roommates:", error.message);
@@ -65,17 +81,22 @@ export default function Alllisting() {
     return placeholderImage;
   };
 
-  const combinedList = activeTab === "room"
-    ? rooms
-    : activeTab === "roomie"
-    ? roommates
-    : [...rooms, ...roommates];
+  const combinedList =
+    activeTab === "room"
+      ? rooms
+      : activeTab === "roomie"
+      ? roommates
+      : [...rooms, ...roommates];
 
   const filteredList = combinedList.filter((item) => {
     const gender = item.gender || item.genderPreference;
     const itemLocation = item.city || item.location || "";
     if (selectedGender !== "Any" && gender !== selectedGender) return false;
-    if (locationQuery && !itemLocation.toLowerCase().includes(locationQuery.toLowerCase())) return false;
+    if (
+      locationQuery &&
+      !itemLocation.toLowerCase().includes(locationQuery.toLowerCase())
+    )
+      return false;
     return true;
   });
 
@@ -101,7 +122,9 @@ export default function Alllisting() {
                 </h3>
                 <div className="flex items-center text-sm text-gray-500 mt-1">
                   <MapPin size={14} className="text-green-500 mr-1" />
-                  <span className="line-clamp-1">{room.city || room.location || "Location not specified"}</span>
+                  <span className="line-clamp-1">
+                    {room.city || room.location || "Location not specified"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -114,10 +137,15 @@ export default function Alllisting() {
 
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="flex items-center text-gray-700">
-              <DollarSign size={18} className="text-green-500 mr-2 flex-shrink-0" />
+              <DollarSign
+                size={18}
+                className="text-green-500 mr-2 flex-shrink-0"
+              />
               <div>
                 <div className="font-medium"> Monthly Rent </div>
-                <div className="text-lg font-semibold text-green-600">₹{room.rent?.toLocaleString() || "Not specified"}</div>
+                <div className="text-lg font-semibold text-green-600">
+                  ₹{room.rent?.toLocaleString() || "Not specified"}
+                </div>
               </div>
             </div>
             <div className="flex items-center text-gray-700">
@@ -131,7 +159,10 @@ export default function Alllisting() {
 
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="flex items-center text-gray-700">
-              <CalendarClock size={18} className="text-green-500 mr-2 flex-shrink-0" />
+              <CalendarClock
+                size={18}
+                className="text-green-500 mr-2 flex-shrink-0"
+              />
               <div>
                 <div className="font-medium">Availability</div>
                 <div className="text-gray-600">Immediate</div>
@@ -140,7 +171,10 @@ export default function Alllisting() {
             <div className="flex items-center text-gray-700">
               {room.genderPreference ? (
                 <>
-                  <User size={18} className="text-green-500 mr-2 flex-shrink-0" />
+                  <User
+                    size={18}
+                    className="text-green-500 mr-2 flex-shrink-0"
+                  />
                   <div>
                     <div className="font-medium">Preferred</div>
                     <div className="text-gray-600">{room.genderPreference}</div>
@@ -148,7 +182,10 @@ export default function Alllisting() {
                 </>
               ) : (
                 <>
-                  <User size={18} className="text-green-500 mr-2 flex-shrink-0" />
+                  <User
+                    size={18}
+                    className="text-green-500 mr-2 flex-shrink-0"
+                  />
                   <div>
                     <div className="font-medium">Preferred</div>
                     <div className="text-gray-600">Any</div>
@@ -160,7 +197,9 @@ export default function Alllisting() {
 
           {room.description && (
             <div className="mb-4 bg-gray-50 p-3 rounded-lg">
-              <p className="text-gray-600 line-clamp-2 italic">{room.description}</p>
+              <p className="text-gray-600 line-clamp-2 italic">
+                {room.description}
+              </p>
             </div>
           )}
 
@@ -199,7 +238,9 @@ export default function Alllisting() {
                     {roommate.gender || "Not specified"}
                   </span>
                   <span className="text-gray-400">•</span>
-                  <span className="text-gray-500 text-sm">{roommate.age || "Age not specified"}</span>
+                  <span className="text-gray-500 text-sm">
+                    {roommate.age || "Age not specified"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -215,11 +256,16 @@ export default function Alllisting() {
               <MapPin size={18} className="text-blue-500 mr-2 flex-shrink-0" />
               <div>
                 <div className="font-medium">Preferred Location</div>
-                <div className="text-gray-600 line-clamp-1">{roommate.city || "Not specified"}</div>
+                <div className="text-gray-600 line-clamp-1">
+                  {roommate.city || "Not specified"}
+                </div>
               </div>
             </div>
             <div className="flex items-center text-gray-700">
-              <BadgeCheck size={18} className="text-blue-500 mr-2 flex-shrink-0" />
+              <BadgeCheck
+                size={18}
+                className="text-blue-500 mr-2 flex-shrink-0"
+              />
               <div>
                 <div className="font-medium">Status</div>
                 <div className="text-gray-600">Looking for room</div>
@@ -229,16 +275,24 @@ export default function Alllisting() {
 
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="flex items-center text-gray-700">
-              <DollarSign size={18} className="text-blue-500 mr-2 flex-shrink-0" />
+              <DollarSign
+                size={18}
+                className="text-blue-500 mr-2 flex-shrink-0"
+              />
               <div>
                 <div className="font-medium">Budget</div>
                 <div className="text-gray-600">
-                  {roommate.budget ? `₹${roommate.budget.toLocaleString()}` : "Not specified"}
+                  {roommate.budget
+                    ? `₹${roommate.budget.toLocaleString()}`
+                    : "Not specified"}
                 </div>
               </div>
             </div>
             <div className="flex items-center text-gray-700">
-              <CalendarClock size={18} className="text-blue-500 mr-2 flex-shrink-0" />
+              <CalendarClock
+                size={18}
+                className="text-blue-500 mr-2 flex-shrink-0"
+              />
               <div>
                 <div className="font-medium">Move-in</div>
                 <div className="text-gray-600">Ready now</div>
@@ -248,7 +302,9 @@ export default function Alllisting() {
 
           {roommate.description && (
             <div className="mb-4 bg-gray-50 p-3 rounded-lg">
-              <p className="text-gray-600 line-clamp-2 italic">{roommate.description}</p>
+              <p className="text-gray-600 line-clamp-2 italic">
+                {roommate.description}
+              </p>
             </div>
           )}
 
@@ -266,8 +322,10 @@ export default function Alllisting() {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-gradient-to-r from-green-50 to-blue-50 pt-8 pb-12 px-6">
         <div className="max-w-6xl mx-auto">
-          
-          <h1 onClick={() => navigate('/')} className="text-4xl  cursor-pointer md:text-5xl font-bold text-center">
+          <h1
+            onClick={() => navigate("/")}
+            className="text-4xl  cursor-pointer md:text-5xl font-bold text-center"
+          >
             ROO<span className="text-green-500">MIE</span>
           </h1>
           <p className="text-center text-gray-600 text-lg md:text-xl mt-2 mb-8">
@@ -276,15 +334,28 @@ export default function Alllisting() {
 
           <div className="bg-white rounded-xl shadow-md p-4 mb-6">
             <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full md:w-auto">
+              <Tabs
+                value={activeTab}
+                onValueChange={setActiveTab}
+                className="w-full md:w-auto"
+              >
                 <TabsList className="grid grid-cols-3 bg-gray-100 p-1 rounded-lg w-full">
-                  <TabsTrigger value="explore" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow">
+                  <TabsTrigger
+                    value="explore"
+                    className="rounded-md data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow"
+                  >
                     Explore All
                   </TabsTrigger>
-                  <TabsTrigger value="room" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow">
+                  <TabsTrigger
+                    value="room"
+                    className="rounded-md data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow"
+                  >
                     Room
                   </TabsTrigger>
-                  <TabsTrigger value="roomie" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow">
+                  <TabsTrigger
+                    value="roomie"
+                    className="rounded-md data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow"
+                  >
                     Roomie
                   </TabsTrigger>
                 </TabsList>
@@ -292,7 +363,10 @@ export default function Alllisting() {
 
               <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
                 <div className="relative flex-grow">
-                  <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <Search
+                    size={18}
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  />
                   <input
                     type="text"
                     placeholder="Search by location"
@@ -306,7 +380,7 @@ export default function Alllisting() {
                   <Button
                     variant="outline"
                     className="flex items-center gap-2 w-full md:w-auto border border-gray-200 rounded-lg hover:bg-gray-50"
-                    onClick={() => setShowGenderOptions(prev => !prev)}
+                    onClick={() => setShowGenderOptions((prev) => !prev)}
                   >
                     <Filter size={16} className="text-green-500" />
                     <span>{selectedGender}</span>
@@ -322,7 +396,9 @@ export default function Alllisting() {
                             setShowGenderOptions(false);
                           }}
                           className={`block w-full text-left px-4 py-3 hover:bg-gray-50 ${
-                            selectedGender === gender ? "font-semibold text-green-600 bg-gray-50" : "text-gray-700"
+                            selectedGender === gender
+                              ? "font-semibold text-green-600 bg-gray-50"
+                              : "text-gray-700"
                           }`}
                         >
                           {gender}
@@ -340,11 +416,21 @@ export default function Alllisting() {
       <div className="max-w-6xl mx-auto px-6 py-8">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-xl font-semibold text-gray-800">
-            {filteredList.length} {activeTab === "roomie" ? "Roommates" : activeTab === "room" ? "Rooms" : "Listings"} Available
+            {filteredList.length}{" "}
+            {activeTab === "roomie"
+              ? "Roommates"
+              : activeTab === "room"
+              ? "Rooms"
+              : "Listings"}{" "}
+            Available
           </h2>
           <p className="text-gray-500 text-sm">
             {selectedGender !== "Any" ? `Filtered by: ${selectedGender}` : ""}
-            {locationQuery ? `${selectedGender !== "Any" ? " • " : ""}Location: ${locationQuery}` : ""}
+            {locationQuery
+              ? `${
+                  selectedGender !== "Any" ? " • " : ""
+                }Location: ${locationQuery}`
+              : ""}
           </p>
         </div>
 
@@ -354,7 +440,9 @@ export default function Alllisting() {
           </div>
         ) : filteredList.length === 0 ? (
           <div className="bg-white rounded-xl shadow-md p-8 text-center">
-            <p className="text-gray-500 text-lg">No listings found matching your criteria</p>
+            <p className="text-gray-500 text-lg">
+              No listings found matching your criteria
+            </p>
             <Button
               variant="outline"
               className="mt-4 text-green-600 border-green-500 hover:bg-green-50"
@@ -368,9 +456,11 @@ export default function Alllisting() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredList.map((item) => (
-              item.type === "room" ? renderRoomCard(item) : renderRoommateCard(item)
-            ))}
+            {filteredList.map((item) =>
+              item.type === "room"
+                ? renderRoomCard(item)
+                : renderRoommateCard(item)
+            )}
           </div>
         )}
       </div>

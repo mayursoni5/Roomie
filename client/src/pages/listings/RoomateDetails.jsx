@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import { apiClient } from "@/lib/api-client";
+import { HOST } from "@/utils/constants";
 import { MapPin, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -12,7 +13,7 @@ export default function RoommateDetails() {
   useEffect(() => {
     const fetchRoommate = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/roomies/getroommate/${id}`);
+        const response = await apiClient.get(`/api/roomies/getroommate/${id}`);
         setRoommate(response.data.roommate);
       } catch (error) {
         console.error("Error fetching roommate:", error.message);
@@ -25,11 +26,15 @@ export default function RoommateDetails() {
   }, [id]);
 
   if (isLoading) {
-    return <div className="flex justify-center items-center h-64">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-64">Loading...</div>
+    );
   }
 
   if (!roommate) {
-    return <div className="text-center mt-8 text-gray-600">Roommate not found</div>;
+    return (
+      <div className="text-center mt-8 text-gray-600">Roommate not found</div>
+    );
   }
 
   return (
