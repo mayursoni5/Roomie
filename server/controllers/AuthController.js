@@ -2,7 +2,7 @@ import { compare } from "bcrypt";
 import User from "../models/UserModel.js";
 import jwt from "jsonwebtoken";
 
-const maxAge = 3 * 24 * 60 * 60 * 1000;
+const maxAge = 3 * 24 * 60 * 60;
 
 const createToken = (email, userId) => {
   return jwt.sign({ email, userId }, process.env.JWT_KEY, {
@@ -18,12 +18,13 @@ export const signup = async (req, res, next) => {
       return res.status(400).send("All fields are required");
     }
 
-    const user = await User.create({  email, password });
+    const user = await User.create({ email, password });
 
     res.cookie("jwt", createToken(email, user.id), {
-      maxAge,
-      secure: true,
-      sameSite: "None",
+      maxAge: maxAge * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
     });
 
     return res.status(201).json({
@@ -56,9 +57,10 @@ export const login = async (req, res, next) => {
       return res.status(400).send("Password is incorrect.");
     }
     res.cookie("jwt", createToken(email, user.id), {
-      maxAge,
-      secure: true,
-      sameSite: "None",
+      maxAge: maxAge * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
     });
 
     return res.status(200).json({
@@ -78,7 +80,12 @@ export const login = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
-    res.cookie("jwt", "", { maxAge: 1, secure: true, sameSite: "None" });
+    res.cookie("jwt", "", {
+      maxAge: 1,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    });
     return res.status(200).send("Logout successfully.");
   } catch (error) {
     console.log({ error });
@@ -91,7 +98,6 @@ export const updateProfile = async (req, res, next) => {
     const { userId } = req; // Ensure userId is attached via middleware (like auth)
     const { userName, gender, city, contactNumber } = req.body;
     console.log(req.body);
-    
 
     if (!userName || !gender || !city || !contactNumber) {
       return res.status(400).json({ message: "All fields are required." });
@@ -153,8 +159,3 @@ export const updateLookingFor = async (req, res, next) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
-
-
-
-
