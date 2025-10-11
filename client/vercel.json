@@ -11,7 +11,7 @@
       ]
     }
   ],
-  "buildCommand": "npm run build",
+  "buildCommand": "npm run prebuild && npm run build",
   "outputDirectory": "dist",
   "framework": "vite"
 }

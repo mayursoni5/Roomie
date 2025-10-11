@@ -1,8 +1,4 @@
-// controllers/chatController.js
-
 import Message from "../models/Message.js";
-
-// Save a new message
 export const sendMessage = async (req, res) => {
   const { senderId, receiverId, message } = req.body;
 
@@ -15,7 +11,6 @@ export const sendMessage = async (req, res) => {
   }
 };
 
-// Get all messages between two users
 export const getMessages = async (req, res) => {
   const { senderId, receiverId } = req.params;
 

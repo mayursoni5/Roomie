@@ -1,53 +1,39 @@
-﻿// import mongoose from "mongoose";
+﻿import mongoose from "mongoose";
 
-// const ListingSchema = new mongoose.Schema({
-//   title: { type: String, required: true },
-//   description: { type: String, required: true },
-//   location: { type: String, required: true },
-//   price: { type: Number, required: true },
-//   capacity: { type: Number, required: true }, // Total number of renters allowed
-//   currentOccupants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Current renters
-//   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Owner of the listing
-// }, { timestamps: true });
+const ListingSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
 
-// const Listing = mongoose.model("Listing", ListingSchema);
+    location: { type: String, required: true },
+    rent: { type: Number, required: true },
 
-// export default Listing;
+    // Type of listing: Looking for a Room or a Roommate
+    type: {
+      type: String,
+      enum: ["room", "roomie"],
+      required: true,
+    },
 
+    // Gender preference of the person posting
+    genderPreference: {
+      type: String,
+      enum: ["Male", "Female", "Any"],
+      default: "Any",
+    },
 
-import mongoose from "mongoose";
+    capacity: { type: Number, required: true },
 
-const ListingSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  
-  location: { type: String, required: true },
-  rent: { type: Number, required: true },
+    currentOccupants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 
-  // Type of listing: Looking for a Room or a Roommate
-  type: { 
-    type: String, 
-    enum: ["room", "roomie"], 
-    required: true 
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
-
-  // Gender preference of the person posting
-  genderPreference: { 
-    type: String, 
-    enum: ["Male", "Female", "Any"], 
-    default: "Any" 
-  },
-
-
-
-  capacity: { type: Number, required: true },
-
-  currentOccupants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-
-  owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-}, 
-{ timestamps: true });
+  { timestamps: true }
+);
 
 const Listing = mongoose.model("Listing", ListingSchema);
 
 export default Listing;
-

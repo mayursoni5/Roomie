@@ -13,7 +13,7 @@ export const createRoom = async (req, res) => {
       furnished,
     } = req.body;
     const { userId } = req;
-    const createdBy = userId; // assuming you have verifyToken middleware to attach user
+    const createdBy = userId;
 
     const newRoom = new Room({
       name,
@@ -39,7 +39,6 @@ export const createRoom = async (req, res) => {
   }
 };
 
-// Get all Rooms
 export const getAllRooms = async (req, res) => {
   try {
     const rooms = await Room.find().populate("createdBy", "userName city");
@@ -51,7 +50,6 @@ export const getAllRooms = async (req, res) => {
   }
 };
 
-// Get a single Room by ID
 export const getRoomById = async (req, res) => {
   try {
     const room = await Room.findById(req.params.id).populate(
@@ -70,7 +68,6 @@ export const getRoomById = async (req, res) => {
   }
 };
 
-// Update a Room
 export const updateRoom = async (req, res) => {
   try {
     const updatedRoom = await Room.findByIdAndUpdate(req.params.id, req.body, {
@@ -92,7 +89,6 @@ export const updateRoom = async (req, res) => {
   }
 };
 
-// Delete a Room
 export const deleteRoom = async (req, res) => {
   try {
     const deletedRoom = await Room.findByIdAndDelete(req.params.id);

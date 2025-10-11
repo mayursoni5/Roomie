@@ -4,7 +4,7 @@ import Profile from "./pages/profile/Profile";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Navbar from "./components/Navbar";
 import Alllisting from "./pages/listings/Alllisting";
-import Home from "./pages/Landing/Home";
+import Home from "./pages/Landing/Home.jsx";
 import LookingFor from "./pages/looking-for/LookingFor";
 import RoomForm from "./pages/rooms/CreateRoom";
 import ListingDetails from "./pages/listings/ListingDetails";

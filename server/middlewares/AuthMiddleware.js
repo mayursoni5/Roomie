@@ -43,7 +43,7 @@ export const isOwner = async (req, res, next) => {
 
 export const protect = async (req, res, next) => {
   try {
-    let token = req.cookies.jwt; // Get token from cookies
+    let token = req.cookies.jwt;
 
     if (!token) {
       return res
@@ -51,10 +51,8 @@ export const protect = async (req, res, next) => {
         .json({ success: false, message: "Unauthorized: No token provided" });
     }
 
-    // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_KEY);
 
-    // Find user based on token
     const user = await User.findById(decoded.userId).select("-password");
 
     if (!user) {
@@ -63,8 +61,8 @@ export const protect = async (req, res, next) => {
         .json({ success: false, message: "Unauthorized: User not found" });
     }
 
-    req.user = user; // Attach user to request
-    next(); // Continue to next middleware/route
+    req.user = user;
+    next();
   } catch (error) {
     return res
       .status(401)

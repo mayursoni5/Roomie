@@ -1,5 +1,5 @@
 import express from "express";
-import { getRoommates } from  "../controllers/getRoommate.js";  // ✅ Correct path
+import { getRoommates } from "../controllers/getRoommate.js";
 import { getSingleRoommate } from "../controllers/getRoommate.js";
 const router = express.Router();
 
